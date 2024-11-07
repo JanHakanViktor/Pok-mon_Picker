@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokémon picker</title>
     <link href="/css/stylesheet.css" rel="Stylesheet">
-    <script src="/script/main.js"></script>
+    <script defer src="/script/main.js"></script>
     <style>
         @import url('https://fonts.cdnfonts.com/css/pokemon-solid');
     </style>
@@ -14,37 +14,35 @@
     <header>
         <section id="welcome">
             <h1>Welcome to Pokémon picker!</h1>
-            <img class="logo" src="">
         </section>
     </header>
 
     <main>
 
-        <section id="content-container">
+        <section id="gameContainer">
             <p id="description">Välj din karaktär och påbörja din resa!</p>
-            <div id="character-selection">
+
+            <div id="characterSelection">
+
                 <div id="ash">
                     <p>ASH KETCHUM</p>
-                    <img class="ash" src="/assets/ash.png" alt="Ash">
+                    <img class="ash" src="/assets/ash.png" alt="Ash Ketchum">
                 </div>
 
                 <div id="gary">
                     <p>GARY OAK</p>
-                    <img class="gary" src="/assets/gary.png" alt="Gary">
+                    <img class="gary" src="/assets/gary.png" alt="Gary Oak">
                 </div>
             </div>
         </section>
 
         <div id="alternatives">
-            <button>Gå ut ur rummet</button>
-            <button>Somna om</button>
+            <button id="firstForward">Påbörja äventyr</button>
         </div>
 
 
-    <!-- <input type="text" name="todoInput" id="todoInput" placeholder="lägg till en todo..." value="ost">
-    <button id="saveTodoButton">Spara</button> -->
-
     </main> 
+
 
     <footer></footer>
 </body>
