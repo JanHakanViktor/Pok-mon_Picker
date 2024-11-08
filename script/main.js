@@ -8,6 +8,7 @@ const description = document.querySelector("#description");
 function main() {
     toggleAsh();
     toggleGary();
+    nextPage();
 }
 
 function toggleAsh() {
@@ -39,5 +40,8 @@ function toggleGary() {
 }
 
 function nextPage() {
+    const buttonForward = document.getElementById("firstForward");
+    buttonForward.onclick = function(){
     
+    }
 }
