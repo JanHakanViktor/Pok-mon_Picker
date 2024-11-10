@@ -54,9 +54,22 @@ if (storedCharacter === "Ash") {
     description.innerHTML = "Välj din karaktär och påbörja din resa!";
 }
 
-function nextPage() {
+function nextPage() { 
     const buttonForward = document.getElementById("firstForward");
-    buttonForward.onclick = function(){
+    buttonForward.onclick = worldPage;
+   
+   
+    const text = document.createElement("P") // skapar p tagg 
+    text.textContent = "bacon" // ändrar innehållet
+    text.className = "large" // lägger till large
+
+    const button = document.createElement("button")
     
+    gameContainer.append(text); // skickar in information som skapas i javascript
     }
+
+function worldPage() {
+    gameContainer.innerHTML = "";
+
 }
+//
