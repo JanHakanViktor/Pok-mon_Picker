@@ -125,3 +125,12 @@ main{
     height: 3rem;
     gap: 3rem;
 }
+
+.secondDescription{
+    display: flex;
+    justify-content: center;
+    font-size: larger;
+    font-weight: bolder;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40px;
+}

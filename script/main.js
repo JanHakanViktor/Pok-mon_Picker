@@ -71,12 +71,23 @@ function nextPage() {
 /* Gömmer characterContainer och skapar nya alternativ för användaren som tar en vidare i spelet */
 function worldPage() {
     characterContainer.classList.add("hidden");
-    const buttonBack = document.createElement("button") // skapar knapp
-    buttonBack.textContent = "Tillbaka"
-    buttonBack.className = "back" // lägger till klassnamn "back"
 
-    const buttonOptionOne = document.createElement("button")
-    const buttonOptionTwo = document.createElement("button")
+    const description = document.createElement("p");
+    description.textContent = "Välj ditt favoritelement!";
+    description.className = "secondDescription"
+
+    const buttonOptionOne = document.createElement("button");
+    buttonOptionOne.textContent = "FIRE ️‍🔥";
+
+    const buttonOptionTwo = document.createElement("button");
+    buttonOptionTwo.textContent = "WATER 💧"
+
+    const buttonOptionThree = document.createElement("button");
+    buttonOptionThree.textContent = "GRASS 🍃"
+
+    const buttonBack = document.createElement("button") // skapar knapp
+    buttonBack.textContent = "Tillbaka";
+    buttonBack.className = "back"; // lägger till klassnamn "back"
 
 
 
@@ -86,8 +97,10 @@ function worldPage() {
         buttonBack.remove();
         buttonOptionOne.remove();
         buttonOptionTwo.remove();
+        description.remove();
+        buttonOptionThree.remove();
     }
 
-    gameContainer.append(buttonBack, buttonOptionOne, buttonOptionTwo); // skickar in information som skapas i javascript
+    gameContainer.append(description, buttonOptionOne, buttonOptionTwo, buttonOptionThree, buttonBack); // skickar in information som skapas i javascript
 }
 //
