@@ -2,26 +2,28 @@
 window.addEventListener("DOMContentLoaded", main);
 
 // Hänvisar till karaktärerna, samt beskrivningen ovanför. 
-const ash = document.querySelector("#ash img");
-const gary = document.querySelector("#gary img");
+const toggleAsh = document.querySelector("#ash img");
+const toggleGary = document.querySelector("#gary img");
 const description = document.querySelector("#description");
 const storedCharacter = localStorage.getItem("selectedCharacter");
 
 //Kör alla huvudfunktioner
 function main() {
-    toggleAsh();
-    toggleGary();
+    characterSelection();
     nextPage();
 }
 
+
+
+function characterSelection() {
+
 //Lägger till style "selected" om man klickar på Ash, samt ändrar beskrivningen till att du valt Ash. Klickar du igen, tas "selected" bort och du återgår till standard-läget där ingen är vald. 
-function toggleAsh() {
-    
-    ash.onclick = function(){
+
+    toggleAsh.onclick = function(){
         const name = "Ash Ketchum";
-        ash.classList.toggle("selected");
-        gary.classList.remove("selected");
-        if(ash.classList.contains("selected")){
+        toggleAsh.classList.toggle("selected");
+        toggleGary.classList.remove("selected");
+        if(toggleAsh.classList.contains("selected")){
             description.innerHTML = "Du har valt " + name + ", dags att påbörja din resa!";
             localStorage.setItem("selectedCharacter", "Ash");
         } else{
@@ -29,16 +31,15 @@ function toggleAsh() {
             localStorage.removeItem("selectedCharacter");
         }
     }
-}
+
 
 //Lägger till style "selected" om man klickar på Gary, samt ändrar beskrivningen till att du valt Gary. Klickar du igen, tas "selected" bort och du återgår till standard-läget där ingen är vald.
-function toggleGary() {
-    
-    gary.onclick = function(){
+
+    toggleGary.onclick = function(){
         const name = "Gary Oak";
-        gary.classList.toggle("selected");
-        ash.classList.remove("selected");
-        if(gary.classList.contains("selected")){
+        toggleGary.classList.toggle("selected");
+        toggleAsh.classList.remove("selected");
+        if(toggleGary.classList.contains("selected")){
             description.innerHTML = "Du har valt " + name + ", dags att påbörja din resa!";
             localStorage.setItem("selectedCharacter", "Gary");
         } else{
@@ -46,31 +47,47 @@ function toggleGary() {
             localStorage.removeItem("selectedCharacter");
         }
     }
+
+
+    //If statement - om du har valt Ash lägg till i local storage, om du valt Gary, ta bort ash från local storage och lägg till Gary. Om ingen väljs, dvs man togglar av, ta bort valda från local storage.
+    if (storedCharacter === "Ash") {
+        toggleAsh.classList.add("selected");
+        description.innerHTML = "Du har valt Ash Ketchum, dags att påbörja din resa!";
+    } else if (storedCharacter === "Gary") {
+        toggleGary.classList.add("selected");
+        description.innerHTML = "Du har valt Gary Oak, dags att påbörja din resa!";
+    } else {
+        description.innerHTML = "Välj din karaktär och påbörja din resa!";
+    }
+
 }
 
-//If statement - om du har valt Ash lägg till i local storage, om du valt Gary, ta bort ash från local storage och lägg till Gary. Om ingen väljs, dvs man togglar av, ta bort valda från local storage.
-if (storedCharacter === "Ash") {
-    ash.classList.add("selected");
-    description.innerHTML = "Du har valt Ash Ketchum, dags att påbörja din resa!";
-} else if (storedCharacter === "Gary") {
-    gary.classList.add("selected");
-    description.innerHTML = "Du har valt Gary Oak, dags att påbörja din resa!";
-} else {
-    description.innerHTML = "Välj din karaktär och påbörja din resa!";
-}
-
-//Rensar och uppdaterar GameContainer kontinuerligt beroende på val användaren gör.
+/* skickar användaren vidare till äventyret, som börjar på worldPage */
 function nextPage() { 
     const buttonForward = document.getElementById("firstForward");
     buttonForward.onclick = worldPage;
+}
+
+/* Gömmer characterContainer och skapar nya alternativ för användaren som tar en vidare i spelet */
+function worldPage() {
+    characterContainer.classList.add("hidden");
+    const buttonBack = document.createElement("button") // skapar knapp
+    buttonBack.textContent = "Tillbaka"
+    buttonBack.className = "back" // lägger till klassnamn "back"
+
+    const buttonOptionOne = document.createElement("button")
+    const buttonOptionTwo = document.createElement("button")
+
+
+
+/* om användaren går tillbaka, måste vi ta bort uppskapade knappar */
+    buttonBack.onclick = function(){
+        characterContainer.classList.remove("hidden");
+        buttonBack.remove();
+        buttonOptionOne.remove();
+        buttonOptionTwo.remove();
     }
 
-function worldPage() {
-    gameContainer.innerHTML = "";
-    const button = document.createElement("button") // skapar knapp
-    button.textContent = "Tillbaka"
-    button.className = "large" // lägger till large
-
-    gameContainer.append(button); // skickar in information som skapas i javascript
+    gameContainer.append(buttonBack, buttonOptionOne, buttonOptionTwo); // skickar in information som skapas i javascript
 }
 //

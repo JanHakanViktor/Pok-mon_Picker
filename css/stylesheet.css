@@ -24,13 +24,16 @@ main{
 }
 
 #gameContainer{
+    border: 5px solid yellow;
+    background-color: rgb(88, 141, 255);
+    color: white;
+}
+
+#characterContainer{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border: 5px solid yellow;
-    background-color: rgb(88, 141, 255);
-    color: white;
 }
 
 #description{
@@ -104,8 +107,8 @@ main{
     margin: 2rem;
   }
 
-.body {
-    display: none;
+.hidden {
+    display: none !important;
 }
 
 #alternatives, button{
