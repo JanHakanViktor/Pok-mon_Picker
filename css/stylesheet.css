@@ -13,6 +13,7 @@ body{
     font-family: 'Pokemon Solid', sans-serif;
     font-weight: lighter;
     color: rgb(250, 221, 0);
+    margin: 0;
 }
 
 main{
@@ -25,6 +26,7 @@ main{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     border: 5px solid yellow;
     background-color: rgb(88, 141, 255);
     color: white;
@@ -145,8 +147,8 @@ main{
 }
 
 .world{
-    width: 1050px;
-    height: 915px;
+    width: 900px;
+    height: 700px;
     border: 30px, solid, rgba(191, 191, 191, 0.701);
     border-radius: 50px;
     margin-top: 25px;
@@ -154,5 +156,4 @@ main{
 
 .buttonMenu{
     display: flex;
-    border: 5px solid black;
 }
