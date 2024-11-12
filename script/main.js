@@ -7,6 +7,23 @@ const toggleGary = document.querySelector("#gary img");
 const description = document.querySelector("#description");
 const storedCharacter = localStorage.getItem("selectedCharacter");
 
+const listOfPokemons = ["Charmander", "Squirtle", "Bulbasaur"];
+
+const charmander = {
+    typeOfElement: "Fire",
+    typeOfAnimal: "Dragon",
+}
+const squirtle = {
+    typeOfElement: "Water",
+    typeOfAnimal: "Turtle",
+}
+const bulbasaur = {
+    typeOfElement: "Grass",
+    typeOfAnimal: "Dinosaur",
+}
+
+
+
 //Kör alla huvudfunktioner
 function main() {
     characterSelection();
@@ -65,18 +82,22 @@ function characterSelection() {
 /* skickar användaren vidare till äventyret, som börjar på worldPage */
 function nextPage() { 
     const buttonForward = document.getElementById("firstForward");
-    buttonForward.onclick = worldPage;
+    buttonForward.onclick = housePage;
 }
 
-function worldPage(){
+function housePage(){
     characterContainer.classList.add("hidden");
     firstForward.classList.add("hidden");
+    description.classList.add("hidden");
+    const name = localStorage.getItem("selectedCharacter");
 
-    description.textContent = "Du har nu gått ur huset och ser dig omkring. Du har tidigare hört att man kan bli tilldelad en Pokémon i Dr Oaks laboratorium."
+    const houseDescription = document.createElement("p");
+    houseDescription.classList = ("description")
+    houseDescription.textContent = "God morgon " + name + ", du har precis haft frukost med din kära mor. Det är nu dags att ta sig an utmaningarna ute i världen."
 
     const gameSceneOne = document.createElement("img");
-    gameSceneOne.className = "world";
-    gameSceneOne.src = "/assets/worldImage.png";
+    gameSceneOne.className = "videoStyling";
+    gameSceneOne.src = "/assets/houseRoom.png";
 
     const buttonBack = document.createElement("button"); // skapar knapp
     buttonBack.textContent = "Tillbaka";
@@ -85,47 +106,84 @@ function worldPage(){
     buttonBack.onclick = function(){
         characterContainer.classList.remove("hidden");
         firstForward.classList.remove("hidden");
+        description.classList.remove("hidden");
         gameSceneOne.remove();
-        buttonToHouse.remove();
+        buttonToWorld.remove();
         buttonBack.remove();
-        buttonToLab.remove();
         options.remove();
+        houseDescription.remove();
     }
 
     const options = document.createElement("div");
     options.className = "buttonMenu";
 
+    const buttonToWorld = document.createElement("button");
+    buttonToWorld.className = "navigateToWorld";
+    buttonToWorld.textContent = "Gå ut i världen";
+    buttonToWorld.onclick = worldPage;
+
+    sceneContainer.append(houseDescription, gameSceneOne);
+
+    options.append(buttonToWorld);
+
+    buttonContainer.append(
+        buttonBack,
+        options,
+    );
+}
+
+function worldPage(){
+    sceneContainer.innerHTML = ""
+    buttonContainer.innerHTML = ""
+
+    const worldDescription = document.createElement("p");
+    worldDescription.classList = ("description");
+    worldDescription.textContent = "Du har nu gått ur huset och ser dig omkring. Du har tidigare hört att man kan bli tilldelad en Pokémon i Dr Oaks laboratorium.";
+
+    const gameSceneTwo = document.createElement("img");
+    gameSceneTwo.className = "videoStyling";
+    gameSceneTwo.src = "/assets/worldImage.png";
+
     const buttonToLab = document.createElement("button");
     buttonToLab.className = "navigateToLab";
     buttonToLab.textContent = "Gå till labbet";
-
-    const buttonToHouse = document.createElement("button");
-    buttonToHouse.className = "navigateToHouse";
-    buttonToHouse.textContent = "Gå hem";
+    buttonToLab.onclick = labPage;
     
-    sceneContainer.append(gameSceneOne);
+    sceneContainer.append(worldDescription, gameSceneTwo);
 
-    options.append(buttonToHouse, buttonToLab);
+    buttonContainer.append(buttonToLab)
+}
 
-    buttonContainer.append(
-        options,
-        buttonBack,
-    );
+function labPage(){
+    sceneContainer.innerHTML = ""
+    buttonContainer.remove();
 
- /* anlendingen till att img kommer längst ned är för att img skapas i gameContainer och där ligger
- buttonContainer först. -> lösningne är att göra buttonContainer med createElement istälet för html
- så att den prioriteras rätt */
+    const labDescription = document.createElement("p");
+    labDescription.classList = ("description");
+    labDescription.textContent = "Du pratar med Professor Oak och han säger att du måste genomföra ett test med 3 frågor. Gå vidare till testet!"
+
+    const gameSceneThree = document.createElement("img");
+    gameSceneThree.className = "videoStyling";
+    gameSceneThree.src = "/assets/pokemonRoom.png";
+
+    const buttonToTest = document.createElement("button");
+    buttonToTest.className = "navigateToTest";
+    buttonToTest.textContent = "Gå till testet";
+    buttonToTest.addEventListener("click", elementPage);
+    
+    sceneContainer.append(labDescription, gameSceneThree, buttonToTest);
 
 }
 
-
 /* Gömmer characterContainer och skapar nya alternativ för användaren som tar en vidare i spelet */
 function elementPage() {
-    characterContainer.classList.add("hidden");
 
     const description = document.createElement("p");
     description.textContent = "Välj ditt favoritelement!";
     description.className = "secondDescription"
+
+
+// skapa en div och lägg alla knappar i den och style som en rad
 
     const buttonOptionOne = document.createElement("button");
     buttonOptionOne.textContent = "FIRE ️‍🔥";
@@ -142,9 +200,12 @@ function elementPage() {
 
 
 
+    // if else statement som leder till drake - sköldpadda - dinosaurie som slutligen leder till pokemon selection
+    //uppdateras i sceneContainer
+
+
 /* om användaren går tillbaka, måste vi ta bort uppskapade knappar */
     buttonBack.onclick = function(){
-        characterContainer.classList.remove("hidden");
         buttonBack.remove();
         buttonOptionOne.remove();
         buttonOptionTwo.remove();
