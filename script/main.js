@@ -25,7 +25,7 @@ function characterSelection() {
         toggleGary.classList.remove("selected");
         if(toggleAsh.classList.contains("selected")){
             description.innerHTML = "Du har valt " + name + ", dags att påbörja din resa!";
-            localStorage.setItem("selectedCharacter", "Ash");
+            localStorage.setItem("selectedCharacter", "Ash Ketchum");
         } else{
             description.innerHTML = "Välj din karaktär och påbörja din resa!";
             localStorage.removeItem("selectedCharacter");
@@ -41,7 +41,7 @@ function characterSelection() {
         toggleAsh.classList.remove("selected");
         if(toggleGary.classList.contains("selected")){
             description.innerHTML = "Du har valt " + name + ", dags att påbörja din resa!";
-            localStorage.setItem("selectedCharacter", "Gary");
+            localStorage.setItem("selectedCharacter", "Gary Oak");
         } else{
             description.innerHTML = "Välj din karaktär och påbörja din resa!";
             localStorage.removeItem("selectedCharacter");
@@ -68,8 +68,57 @@ function nextPage() {
     buttonForward.onclick = worldPage;
 }
 
+function worldPage(){
+    characterContainer.classList.add("hidden");
+    firstForward.classList.add("hidden");
+
+    const gameSceneOne = document.createElement("img");
+    gameSceneOne.className = "world";
+    gameSceneOne.src = "/assets/worldImage.png";
+
+    const buttonBack = document.createElement("button"); // skapar knapp
+    buttonBack.textContent = "Tillbaka";
+    buttonBack.className = "back"; // lägger till klassnamn "back"
+
+    buttonBack.onclick = function(){
+        characterContainer.classList.remove("hidden");
+        firstForward.classList.remove("hidden");
+        gameSceneOne.remove();
+        buttonToGym.remove();
+        buttonBack.remove();
+        buttonToLab.remove();
+        options.remove();
+    }
+
+    const options = document.createElement("div");
+    options.className = "buttonMenu";
+
+    const buttonToLab = document.createElement("button");
+    buttonToLab.className = "navigateToLab";
+    buttonToLab.textContent = "Välj ditt element";
+
+    const buttonToGym = document.createElement("button");
+    buttonToGym.className = "navigateToGym";
+    buttonToGym.textContent = "Gå till gymmet";
+    
+    gameContainer.append(gameSceneOne);
+
+    options.append(buttonToLab, buttonToGym);
+
+    buttonContainer.append(
+        options,
+        buttonBack,
+    );
+
+ /* anlendingen till att img kommer längst ned är för att img skapas i gameContainer och där ligger
+ buttonContainer först. -> lösningne är att göra buttonContainer med createElement istälet för html
+ så att den prioriteras rätt */
+
+}
+
+
 /* Gömmer characterContainer och skapar nya alternativ för användaren som tar en vidare i spelet */
-function worldPage() {
+function elementPage() {
     characterContainer.classList.add("hidden");
 
     const description = document.createElement("p");
@@ -101,6 +150,11 @@ function worldPage() {
         buttonOptionThree.remove();
     }
 
-    gameContainer.append(description, buttonOptionOne, buttonOptionTwo, buttonOptionThree, buttonBack); // skickar in information som skapas i javascript
+    gameContainer.append(
+        description,
+        buttonOptionOne, 
+        buttonOptionTwo, 
+        buttonOptionThree, 
+        buttonBack); // skickar in information som skapas i javascript
 }
 //
