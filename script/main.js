@@ -72,6 +72,8 @@ function worldPage(){
     characterContainer.classList.add("hidden");
     firstForward.classList.add("hidden");
 
+    description.textContent = "Du har nu gått ur huset och ser dig omkring. Du har tidigare hört att man kan bli tilldelad en Pokémon i Dr Oaks laboratorium."
+
     const gameSceneOne = document.createElement("img");
     gameSceneOne.className = "world";
     gameSceneOne.src = "/assets/worldImage.png";
@@ -84,7 +86,7 @@ function worldPage(){
         characterContainer.classList.remove("hidden");
         firstForward.classList.remove("hidden");
         gameSceneOne.remove();
-        buttonToGym.remove();
+        buttonToHouse.remove();
         buttonBack.remove();
         buttonToLab.remove();
         options.remove();
@@ -95,15 +97,15 @@ function worldPage(){
 
     const buttonToLab = document.createElement("button");
     buttonToLab.className = "navigateToLab";
-    buttonToLab.textContent = "Välj ditt element";
+    buttonToLab.textContent = "Gå till labbet";
 
-    const buttonToGym = document.createElement("button");
-    buttonToGym.className = "navigateToGym";
-    buttonToGym.textContent = "Gå till gymmet";
+    const buttonToHouse = document.createElement("button");
+    buttonToHouse.className = "navigateToHouse";
+    buttonToHouse.textContent = "Gå hem";
     
-    gameContainer.append(gameSceneOne);
+    sceneContainer.append(gameSceneOne);
 
-    options.append(buttonToLab, buttonToGym);
+    options.append(buttonToHouse, buttonToLab);
 
     buttonContainer.append(
         options,
