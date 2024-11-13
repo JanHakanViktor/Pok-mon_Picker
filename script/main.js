@@ -5,91 +5,138 @@ window.addEventListener("DOMContentLoaded", main);
 const toggleAsh = document.querySelector("#ash img");
 const toggleGary = document.querySelector("#gary img");
 const description = document.querySelector("#description");
-const storedCharacter = localStorage.getItem("selectedCharacter");
 
-const listOfPokemons = ["Charmander", "Squirtle", "Bulbasaur"];
 
+const backgroundMusic = new Audio("assets/backgroundmusic.mp3"); 
+backgroundMusic.loop = true; 
+backgroundMusic.volume = 0.05; 
+backgroundMusic.autoplay = true;
+
+//skapar enskilda object för pokemons
 const charmander = {
-    typeOfElement: "Fire",
-    typeOfAnimal: "Dragon",
-}
-const squirtle = {
-    typeOfElement: "Water",
-    typeOfAnimal: "Turtle",
-}
-const bulbasaur = {
-    typeOfElement: "Grass",
-    typeOfAnimal: "Dinosaur",
-}
+    name: "Charmander",
+    element: "FIRE 🔥",
+    animal: "Dragon",
+    color: "Red",
+    image: "/assets/charmander.png"
+};
 
+const squirtle = {
+    name: "Squirtle",
+    element: "WATER 💧",
+    animal: "Turtle",
+    color: "Blue",
+    image: "/assets/squirtle.png"
+};
+
+const bulbasaur = {
+    name: "Bulbasaur",
+    element: "GRASS 🍃",
+    animal: "Dinosaur",
+    color: "Green",
+    image: "/assets/bulbasaur.png"
+};
+
+const pikachu = {
+    name: "Pikachu",
+    element: "Electric",
+    animal: "Mouse",
+    color: "Yellow",
+    image: "/assets/pikachu.png"
+};
+
+
+function restoreSavedPage(){
+    const savedPage = localStorage.getItem("savedPage");
+    if (savedPage != null){
+        hideElements([characterContainer, firstForward, description]);
+    }
+    switch(savedPage) {
+        case "housePage":   
+            housePage();
+            break;
+        case "worldPage":
+            worldPage();
+            break;
+        case "labPage":
+            labPage();
+            break;
+        case "elementPage":
+            elementPage();
+            break;
+        case "animalPage":
+            animalPage();
+            break;
+        case "colorPage":
+            colorPage();
+            break;
+        case "selectedPokemonPage":
+            selectedPokemonPage();
+            break;
+    }
+}
 
 
 //Kör alla huvudfunktioner
 function main() {
     characterSelection();
     nextPage();
+    restoreSavedPage();
 }
 
-
+//skapar en metod som lägger till eller tar bort selected.
+function onCharacterToggle(name, elementToSelect, elementToRemove){
+    elementToSelect.classList.toggle("selected");
+    elementToRemove.classList.remove("selected");
+    
+    if(elementToSelect.classList.contains("selected")){
+        description.innerHTML = "Du har valt " + name + ", dags att påbörja din resa!";
+        localStorage.setItem("selectedCharacter", name);
+    } else {
+        description.innerHTML = "Välj din karaktär och påbörja din resa!";
+        localStorage.removeItem("selectedCharacter");
+    }
+    
+}
 
 function characterSelection() {
 
-//Lägger till style "selected" om man klickar på Ash, samt ändrar beskrivningen till att du valt Ash. Klickar du igen, tas "selected" bort och du återgår till standard-läget där ingen är vald. 
-
     toggleAsh.onclick = function(){
-        const name = "Ash Ketchum";
-        toggleAsh.classList.toggle("selected");
-        toggleGary.classList.remove("selected");
-        if(toggleAsh.classList.contains("selected")){
-            description.innerHTML = "Du har valt " + name + ", dags att påbörja din resa!";
-            localStorage.setItem("selectedCharacter", "Ash Ketchum");
-        } else{
-            description.innerHTML = "Välj din karaktär och påbörja din resa!";
-            localStorage.removeItem("selectedCharacter");
-        }
+        onCharacterToggle("Ash Ketchum", toggleAsh, toggleGary);
     }
-
-
-//Lägger till style "selected" om man klickar på Gary, samt ändrar beskrivningen till att du valt Gary. Klickar du igen, tas "selected" bort och du återgår till standard-läget där ingen är vald.
 
     toggleGary.onclick = function(){
-        const name = "Gary Oak";
-        toggleGary.classList.toggle("selected");
-        toggleAsh.classList.remove("selected");
-        if(toggleGary.classList.contains("selected")){
-            description.innerHTML = "Du har valt " + name + ", dags att påbörja din resa!";
-            localStorage.setItem("selectedCharacter", "Gary Oak");
-        } else{
-            description.innerHTML = "Välj din karaktär och påbörja din resa!";
-            localStorage.removeItem("selectedCharacter");
-        }
+        onCharacterToggle("Gary Oak", toggleGary, toggleAsh);
     }
-
-
-    //If statement - om du har valt Ash lägg till i local storage, om du valt Gary, ta bort ash från local storage och lägg till Gary. Om ingen väljs, dvs man togglar av, ta bort valda från local storage.
-    if (storedCharacter === "Ash") {
-        toggleAsh.classList.add("selected");
-        description.innerHTML = "Du har valt Ash Ketchum, dags att påbörja din resa!";
-    } else if (storedCharacter === "Gary") {
-        toggleGary.classList.add("selected");
-        description.innerHTML = "Du har valt Gary Oak, dags att påbörja din resa!";
-    } else {
-        description.innerHTML = "Välj din karaktär och påbörja din resa!";
-    }
-
 }
 
-/* skickar användaren vidare till äventyret, som börjar på worldPage */
 function nextPage() { 
     const buttonForward = document.getElementById("firstForward");
     buttonForward.onclick = housePage;
 }
 
+function hideElement(element){
+    element.classList.add("hidden");
+}
+
+
+function hideElements(elements){
+    elements.forEach(element => {
+        element.classList.add("hidden");
+    });
+}
+
+function showElements(elements){
+    elements.forEach(element => {
+        element.classList.remove("hidden");
+    });
+}
+
 function housePage(){
-    characterContainer.classList.add("hidden");
-    firstForward.classList.add("hidden");
-    description.classList.add("hidden");
+    localStorage.setItem("savedPage", "housePage");
+    hideElements([characterContainer, firstForward, description]); //kallar på metoden och lägger in argument, dvs vilka element som ska döljas.
     const name = localStorage.getItem("selectedCharacter");
+
 
     const houseDescription = document.createElement("p");
     houseDescription.classList = ("description")
@@ -104,9 +151,7 @@ function housePage(){
     buttonBack.className = "back"; // lägger till klassnamn "back"
 
     buttonBack.onclick = function(){
-        characterContainer.classList.remove("hidden");
-        firstForward.classList.remove("hidden");
-        description.classList.remove("hidden");
+        showElements([characterContainer, firstForward, description]);
         gameSceneOne.remove();
         buttonToWorld.remove();
         buttonBack.remove();
@@ -133,12 +178,13 @@ function housePage(){
 }
 
 function worldPage(){
+    localStorage.setItem("savedPage", "worldPage");
     sceneContainer.innerHTML = ""
     buttonContainer.innerHTML = ""
 
     const worldDescription = document.createElement("p");
     worldDescription.classList = ("description");
-    worldDescription.textContent = "Du har nu gått ur huset och ser dig omkring. Du har tidigare hört att man kan bli tilldelad en Pokémon i Dr Oaks laboratorium.";
+    worldDescription.textContent = "Du har nu gått ur huset och ser dig omkring. Du har tidigare hört att man kan bli tilldelad en Pokémon i Professor Oaks laboratorium.";
 
     const gameSceneTwo = document.createElement("img");
     gameSceneTwo.className = "videoStyling";
@@ -155,6 +201,7 @@ function worldPage(){
 }
 
 function labPage(){
+    localStorage.setItem("savedPage", "labPage");
     sceneContainer.innerHTML = ""
     buttonContainer.remove();
 
@@ -169,55 +216,101 @@ function labPage(){
     const buttonToTest = document.createElement("button");
     buttonToTest.className = "navigateToTest";
     buttonToTest.textContent = "Gå till testet";
-    buttonToTest.addEventListener("click", elementPage);
+    buttonToTest.onclick = () => {
+        elementPage();
+        hideElements([buttonToTest, gameSceneThree, labDescription]);
+    };
     
     sceneContainer.append(labDescription, gameSceneThree, buttonToTest);
 
 }
 
-/* Gömmer characterContainer och skapar nya alternativ för användaren som tar en vidare i spelet */
-function elementPage() {
-
-    const description = document.createElement("p");
-    description.textContent = "Välj ditt favoritelement!";
-    description.className = "secondDescription"
-
-
-// skapa en div och lägg alla knappar i den och style som en rad
-
-    const buttonOptionOne = document.createElement("button");
-    buttonOptionOne.textContent = "FIRE ️‍🔥";
-
-    const buttonOptionTwo = document.createElement("button");
-    buttonOptionTwo.textContent = "WATER 💧"
-
-    const buttonOptionThree = document.createElement("button");
-    buttonOptionThree.textContent = "GRASS 🍃"
-
-    const buttonBack = document.createElement("button") // skapar knapp
-    buttonBack.textContent = "Tillbaka";
-    buttonBack.className = "back"; // lägger till klassnamn "back"
-
-
-
-    // if else statement som leder till drake - sköldpadda - dinosaurie som slutligen leder till pokemon selection
-    //uppdateras i sceneContainer
-
-
-/* om användaren går tillbaka, måste vi ta bort uppskapade knappar */
-    buttonBack.onclick = function(){
-        buttonBack.remove();
-        buttonOptionOne.remove();
-        buttonOptionTwo.remove();
-        description.remove();
-        buttonOptionThree.remove();
-    }
-
-    gameContainer.append(
-        description,
-        buttonOptionOne, 
-        buttonOptionTwo, 
-        buttonOptionThree, 
-        buttonBack); // skickar in information som skapas i javascript
+function elementPage(){
+    localStorage.setItem("savedPage", "elementPage");
+    createQuestion(
+        "Välj ditt favoritelement!",
+        [charmander.element, squirtle.element, bulbasaur.element],
+        (element) => {
+            localStorage.setItem("selectedElement", element);
+            animalPage();
+        }
+    );
 }
-//
+
+function animalPage(){
+    localStorage.setItem("savedPage", "animalPage");
+    createQuestion(
+        "Vilket är ditt favoritdjur?",
+        [charmander.animal, squirtle.animal, bulbasaur.animal], 
+        (animal) => {
+            localStorage.setItem("selectedAnimal", animal);
+            colorPage();
+        }
+    );
+}
+
+function colorPage(){
+    localStorage.setItem("savedPage", "colorPage");
+    createQuestion(
+        "Vad är din favoritfärg?", 
+        [charmander.color, squirtle.color, bulbasaur.color], 
+        (color) => {
+            localStorage.setItem("selectedColor", color);
+            selectedPokemonPage();
+        }
+    );
+}
+
+//skapar en metod som visar beskrivningen av frågor och alternativ som vi sedan kommer att kallar på. För varje alternativ, skapar vi en knapp som vi sedan tar bort efter att man klickar på den.
+function createQuestion(questionDescription, options, callback){
+    const pokemonDescription = document.createElement("p");
+    pokemonDescription.textContent = questionDescription;
+    pokemonDescription.className = "description";
+
+    sceneContainer.appendChild(pokemonDescription);
+
+    const optionButtons = []
+
+    options.forEach(option => {
+        const pokemonButton = document.createElement("button");
+        pokemonButton.className = "continueSelectionButton";
+        pokemonButton.textContent = option;
+        optionButtons.push(pokemonButton)
+        pokemonButton.onclick = () => {
+            callback(option);
+            pokemonDescription.remove();
+            optionButtons.forEach(optionButton => {
+                optionButton.remove();
+            });
+        };
+        sceneContainer.appendChild(pokemonButton);
+    });
+}
+
+//kallar på createQuestion och lägger in argument för questionDescription och option som sedan lagras i respektive variabel, som skapats uppe i scriptet.
+
+function selectedPokemonPage(){
+    localStorage.setItem("savedPage", "selectedPokemonPage");
+    let chosenPokemon = pikachu; //Vi sätter default till Pikachu, om utifall att ingen av de valda alternativen från listan matchar. 
+
+    [charmander, squirtle, bulbasaur].forEach(pokemon => {
+        if(
+            pokemon.element === localStorage.getItem("selectedElement") &&
+            pokemon.animal === localStorage.getItem("selectedAnimal") &&
+            pokemon.color === localStorage.getItem("selectedColor")
+        ) { 
+            chosenPokemon = pokemon;
+        } 
+    });
+
+    const selectedPokemonImg = document.createElement("img");
+    selectedPokemonImg.className = "videoStyling";
+    selectedPokemonImg.src = chosenPokemon.image;
+
+
+    const storedCharacter = localStorage.getItem("selectedCharacter");
+    const endResult = document.createElement("p");
+    endResult.className = "description";
+    endResult.textContent = `${storedCharacter} har blivit tilldelad ${chosenPokemon.name}!`;
+    sceneContainer.append(endResult, selectedPokemonImg);
+}
