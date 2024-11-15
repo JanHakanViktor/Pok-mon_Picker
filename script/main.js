@@ -4,16 +4,6 @@
  */
 window.addEventListener("DOMContentLoaded", main);
 
-/** @type {HTMLImageElement} Element för att välja Ash */
-const toggleAsh = document.querySelector("#ash img");
-
-/** @type {HTMLImageElement} Element för att välja Gary */
-const toggleGary = document.querySelector("#gary img");
-
-/** @type {HTMLButtonElement} Knapp för att återställa local storage och gå tillbaka till startsidan */
-const returnButton = document.getElementById("return");
-
-
 /**
  *  Inställningar för bakgrundsmusik
  */
@@ -22,6 +12,15 @@ backgroundMusic.loop = true;
 backgroundMusic.volume = 0.05;
 backgroundMusic.autoplay = true;
 
+
+/** @type {HTMLImageElement} Element för att välja Ash */
+const toggleAsh = document.querySelector("#ash img");
+
+/** @type {HTMLImageElement} Element för att välja Gary */
+const toggleGary = document.querySelector("#gary img");
+
+/** @type {HTMLButtonElement} Knapp för att återställa local storage och gå tillbaka till startsidan */
+const returnButton = document.getElementById("return");
 
 
 /**
@@ -174,7 +173,13 @@ function showElements(elements){
     });
 }
 
-
+/**
+ * För samtliga sidor; housePage, worldPage och labPage:
+ * Visar returnButton så att användaren kan starta om spelet.
+ * Rensar innehållet på respektive sida i syfte för att uppdatera med nytt innehåll.
+ * Visar nästkommande sida med tillbehörande beskrivning, bild och navigeringsalternativ.
+ * Uppdaterar local storage med savedPage till respektive sida om spelet avbryts under spelets gång.
+ */
 function housePage(){
     localStorage.setItem("savedPage", "housePage");
     hideElements([characterContainer, firstForward, description]);
@@ -271,54 +276,38 @@ function labPage(){
 
 }
 
-function elementPage(){
-    showElements([returnButton]);
-    localStorage.setItem("savedPage", "elementPage");
-    createQuestion(
-        "Välj ditt favoritelement!",
-        [charmander.element, squirtle.element, bulbasaur.element],
-        (element) => {
-            localStorage.setItem("selectedElement", element);
-            animalPage();
-        }
-    );
-}
-
-function animalPage(){
-    showElements([returnButton]);
-    localStorage.setItem("savedPage", "animalPage");
-    createQuestion(
-        "Vilket är ditt favoritdjur?",
-        [charmander.animal, squirtle.animal, bulbasaur.animal], 
-        (animal) => {
-            localStorage.setItem("selectedAnimal", animal);
-            colorPage();
-        }
-    );
-}
-
-function colorPage(){
-    showElements([returnButton]);
-    localStorage.setItem("savedPage", "colorPage");
-    createQuestion(
-        "Vad är din favoritfärg?", 
-        [charmander.color, squirtle.color, bulbasaur.color], 
-        (color) => {
-            localStorage.setItem("selectedColor", color);
-            selectedPokemonPage();
-        }
-    );
-}
-
+/**
+ * Funktionen gör det möjligt att generera en fråga och presenterar den i form av knappar. När användaren gör ett val:
+ * - Anropas en callback-funktion med det valda alternativet.
+ * - Frågan och dess alternativ tas bort från sidan.
+ * 
+ * @param {string} questionDescription - visar beskrivningen av frågan.
+ * @param {string[]} options - Skapar en array med valmöjligheter baseat på vilken sida som användaren kommer infinna sig på.
+ * @param {Function} callback - Callbackfunktion för att hantera vad som händer när ett val av användaren gjorts.
+ * 
+ * 
+ * @example
+ * createQuestion(
+ *   "Vilket är ditt favoritelement?",
+ *   ["FIRE 🔥", "WATER 💧", "GRASS 🍃"],
+ *   (selectedOption) => {
+ *     console.log("Du valde: " + selectedOption);
+ *   }
+ * );
+ */
 function createQuestion(questionDescription, options, callback){
+    // Skapar ett element för frågan och sätter dess text.
     const pokemonDescription = document.createElement("p");
     pokemonDescription.textContent = questionDescription;
     pokemonDescription.className = "description";
 
+    // Lägger till frågan i sceneContainer så att den syns.
     sceneContainer.appendChild(pokemonDescription);
 
+    // skapar en lista som gör det möjligt att hålla alla skapade alternativknappar.
     const optionButtons = []
 
+    // Skapar knappar för varje alternativ och lägger till dem i scenen.
     options.forEach(option => {
         const pokemonButton = document.createElement("button");
         pokemonButton.className = "continueSelectionButton";
@@ -335,26 +324,97 @@ function createQuestion(questionDescription, options, callback){
     });
 }
 
+
+/**
+ * Navigerar till "element-sidan" och låter användaren välja sitt favoritelement (Fire, water, grass).
+ * Funktionen visar returnButton, sparar den nuvarande sidan i local storage
+ * och skapar en fråga med tillgängliga element som val. När användaren gör sitt val,
+ * sparas valet i local storage under nyckeln `selectedElement`.
+ * Efter valt alternativ, navigeras användaren vidare till nästa fråga, "animalPage".
+ */
+function elementPage(){
+    showElements([returnButton]);
+    localStorage.setItem("savedPage", "elementPage");
+    createQuestion(
+        "Välj ditt favoritelement!",
+        [charmander.element, squirtle.element, bulbasaur.element],
+        (element) => {
+            localStorage.setItem("selectedElement", element);
+            animalPage();
+        }
+    );
+}
+
+/**
+ * Animalpage gör exakt samma som elementPage men navigerar användaren vidare till colorPage
+ * efter valt alternativ.
+ */
+function animalPage(){
+    showElements([returnButton]);
+    localStorage.setItem("savedPage", "animalPage");
+    createQuestion(
+        "Vilket är ditt favoritdjur?",
+        [charmander.animal, squirtle.animal, bulbasaur.animal], 
+        (animal) => {
+            localStorage.setItem("selectedAnimal", animal);
+            colorPage();
+        }
+    );
+}
+
+/**
+ * colorPage gör exakt samma som elementPage men navigerar användaren vidare till selectedPokemonPage
+ * efter valt alternativ.
+ */
+function colorPage(){
+    showElements([returnButton]);
+    localStorage.setItem("savedPage", "colorPage");
+    createQuestion(
+        "Vad är din favoritfärg?", 
+        [charmander.color, squirtle.color, bulbasaur.color], 
+        (color) => {
+            localStorage.setItem("selectedColor", color);
+            selectedPokemonPage();
+        }
+    );
+}
+
+
+/**
+ * Visar sidan för vald Pokémon.
+ * 
+ * Funktionen identifierar den Pokémon som bäst matchar användarens förvalda dvs, element, animal och color.
+ * Om ingen Pokémon matchar, tilldelas Pikachu som default.
+ * 
+ * På sidan:
+ * - Visas Pokémon-bilden, en text som anger vilken karaktär användaren valde på startsidan samt
+ *   vilken Pokémon som tilldelades.
+ * - Sidan visar även tillbaka-knappen för att starta om spelet.
+ */
 function selectedPokemonPage(){
     showElements([returnButton]);
     localStorage.setItem("savedPage", "selectedPokemonPage");
+
+    // Standardval av Pokémon (Pikachu) om inga val matchar.
     let chosenPokemon = pikachu;
 
+    // Jämför användarens val (element, animal, color) med varje Pokémon.
     [charmander, squirtle, bulbasaur].forEach(pokemon => {
         if(
             pokemon.element === localStorage.getItem("selectedElement") &&
             pokemon.animal === localStorage.getItem("selectedAnimal") &&
             pokemon.color === localStorage.getItem("selectedColor")
         ) { 
-            chosenPokemon = pokemon;
+            chosenPokemon = pokemon; // Tilldelar den Pokémon som matchar användarens val.
         } 
     });
 
+    // Skapar och lägger till Pokémon-bilden.
     const selectedPokemonImg = document.createElement("img");
     selectedPokemonImg.className = "videoStyling";
     selectedPokemonImg.src = chosenPokemon.image;
 
-
+    // Skapar och lägger till text som beskriver tilldelade Pokémon.
     const storedCharacter = localStorage.getItem("selectedCharacter");
     const endResult = document.createElement("p");
     endResult.className = "description";
@@ -362,6 +422,9 @@ function selectedPokemonPage(){
     sceneContainer.append(endResult, selectedPokemonImg);
 }
 
+/**
+ * Rensar sparad data från local storage och laddar om sidan när returnButton klickas på.
+ */
 returnButton.onclick = () => {
     localStorage.clear();
     location.reload();
