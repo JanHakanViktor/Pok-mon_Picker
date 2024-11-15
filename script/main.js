@@ -192,7 +192,7 @@ function housePage(){
 
     const gameSceneOne = document.createElement("img");
     gameSceneOne.className = "videoStyling";
-    gameSceneOne.src = "/assets/houseRoom.png";
+    gameSceneOne.src = "./assets/HouseRoom.png";
 
     const buttonBack = document.createElement("button"); 
     buttonBack.textContent = "Tillbaka";
