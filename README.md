@@ -16,4 +16,4 @@ Utforska olika scener genom att navigera med knapparna.
 Svara på frågor för att välja ditt favorit-element, djur och färg.
 Få din Pokémon baserat på dina val!
 
-https://github.com/JanHakanViktor/Pokemon_Picker
+https://janhakanviktor.github.io/Pokemon_Picker/
