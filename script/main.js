@@ -1,18 +1,39 @@
-// kör main-funktionen när DOM är laddad
+/**
+ * Huvudfunktion för att initiera karaktärsval och navigering.
+ * @listens window:DOMContentLoaded
+ */
 window.addEventListener("DOMContentLoaded", main);
 
-// Hänvisar till karaktärerna, samt beskrivningen ovanför. 
+/** @type {HTMLImageElement} Element för att välja Ash */
 const toggleAsh = document.querySelector("#ash img");
+
+/** @type {HTMLImageElement} Element för att välja Gary */
 const toggleGary = document.querySelector("#gary img");
-const description = document.querySelector("#description");
+
+/** @type {HTMLButtonElement} Knapp för att återställa local storage och gå tillbaka till startsidan */
+const returnButton = document.getElementById("return");
 
 
+/**
+ *  Inställningar för bakgrundsmusik
+ */
 const backgroundMusic = new Audio("assets/backgroundmusic.mp3"); 
 backgroundMusic.loop = true; 
-backgroundMusic.volume = 0.05; 
+backgroundMusic.volume = 0.05;
 backgroundMusic.autoplay = true;
 
-//skapar enskilda object för pokemons
+
+
+/**
+ * Detaljer om en Pokémon-karaktär.
+ * @typedef {Object} Pokemon
+ * @property {string} name - Pokémonens namn.
+ * @property {string} element - Pokémonens elementtyp.
+ * @property {string} animal - Pokémonens inspiration från djurvärlden.
+ * @property {string} color - Pokémonens huvudsakliga färg.
+ * @property {string} image - Bildens filväg för Pokémonen.
+ */
+
 const charmander = {
     name: "Charmander",
     element: "FIRE 🔥",
@@ -46,6 +67,9 @@ const pikachu = {
 };
 
 
+/**
+ * Återställer den senast sparade sidan från local storage.
+ */
 function restoreSavedPage(){
     const savedPage = localStorage.getItem("savedPage");
     if (savedPage != null){
@@ -76,15 +100,21 @@ function restoreSavedPage(){
     }
 }
 
-
-//Kör alla huvudfunktioner
+/**
+ * Startfunktion som kör characterSelection, nextPage samt restoreSavedPage.
+ */
 function main() {
     characterSelection();
     nextPage();
     restoreSavedPage();
 }
 
-//skapar en metod som lägger till eller tar bort selected.
+/**
+ * funktion som gör att man kan växla mellan karaktärer.
+ * @param {string} name - Namnet på den valda karaktären.
+ * @param {HTMLElement} elementToSelect - Element för den karaktär som ska väljas.
+ * @param {HTMLElement} elementToRemove - Element för den andra karaktären som ska avmarkeras.
+ */
 function onCharacterToggle(name, elementToSelect, elementToRemove){
     elementToSelect.classList.toggle("selected");
     elementToRemove.classList.remove("selected");
@@ -99,7 +129,12 @@ function onCharacterToggle(name, elementToSelect, elementToRemove){
     
 }
 
+
+/**
+ * Funktion som startar interaktionen för karaktärsval.
+ */
 function characterSelection() {
+    hideElements([returnButton]);
 
     toggleAsh.onclick = function(){
         onCharacterToggle("Ash Ketchum", toggleAsh, toggleGary);
@@ -110,31 +145,39 @@ function characterSelection() {
     }
 }
 
+/**
+ * Knapp som tar en vidare till housePage.
+ */
 function nextPage() { 
     const buttonForward = document.getElementById("firstForward");
     buttonForward.onclick = housePage;
 }
 
-function hideElement(element){
-    element.classList.add("hidden");
-}
-
-
+/**
+ * Funktion som används för att dölja element.
+ * @param {HTMLElement[]} elements - De element som ska döljas.
+ */
 function hideElements(elements){
     elements.forEach(element => {
         element.classList.add("hidden");
     });
 }
 
+
+/**
+ * Funktion som används för att visa element som är dolda.
+ * @param {HTMLElement[]} elements - De element som ska visas.
+ */
 function showElements(elements){
     elements.forEach(element => {
         element.classList.remove("hidden");
     });
 }
 
+
 function housePage(){
     localStorage.setItem("savedPage", "housePage");
-    hideElements([characterContainer, firstForward, description]); //kallar på metoden och lägger in argument, dvs vilka element som ska döljas.
+    hideElements([characterContainer, firstForward, description]);
     const name = localStorage.getItem("selectedCharacter");
 
 
@@ -146,9 +189,9 @@ function housePage(){
     gameSceneOne.className = "videoStyling";
     gameSceneOne.src = "/assets/houseRoom.png";
 
-    const buttonBack = document.createElement("button"); // skapar knapp
+    const buttonBack = document.createElement("button"); 
     buttonBack.textContent = "Tillbaka";
-    buttonBack.className = "back"; // lägger till klassnamn "back"
+    buttonBack.className = "back"; 
 
     buttonBack.onclick = function(){
         showElements([characterContainer, firstForward, description]);
@@ -157,6 +200,7 @@ function housePage(){
         buttonBack.remove();
         options.remove();
         houseDescription.remove();
+        hideElements([returnButton]);
     }
 
     const options = document.createElement("div");
@@ -178,6 +222,7 @@ function housePage(){
 }
 
 function worldPage(){
+    showElements([returnButton]);
     localStorage.setItem("savedPage", "worldPage");
     sceneContainer.innerHTML = ""
     buttonContainer.innerHTML = ""
@@ -201,6 +246,7 @@ function worldPage(){
 }
 
 function labPage(){
+    showElements([returnButton]);
     localStorage.setItem("savedPage", "labPage");
     sceneContainer.innerHTML = ""
     buttonContainer.remove();
@@ -226,6 +272,7 @@ function labPage(){
 }
 
 function elementPage(){
+    showElements([returnButton]);
     localStorage.setItem("savedPage", "elementPage");
     createQuestion(
         "Välj ditt favoritelement!",
@@ -238,6 +285,7 @@ function elementPage(){
 }
 
 function animalPage(){
+    showElements([returnButton]);
     localStorage.setItem("savedPage", "animalPage");
     createQuestion(
         "Vilket är ditt favoritdjur?",
@@ -250,6 +298,7 @@ function animalPage(){
 }
 
 function colorPage(){
+    showElements([returnButton]);
     localStorage.setItem("savedPage", "colorPage");
     createQuestion(
         "Vad är din favoritfärg?", 
@@ -261,7 +310,6 @@ function colorPage(){
     );
 }
 
-//skapar en metod som visar beskrivningen av frågor och alternativ som vi sedan kommer att kallar på. För varje alternativ, skapar vi en knapp som vi sedan tar bort efter att man klickar på den.
 function createQuestion(questionDescription, options, callback){
     const pokemonDescription = document.createElement("p");
     pokemonDescription.textContent = questionDescription;
@@ -287,11 +335,10 @@ function createQuestion(questionDescription, options, callback){
     });
 }
 
-//kallar på createQuestion och lägger in argument för questionDescription och option som sedan lagras i respektive variabel, som skapats uppe i scriptet.
-
 function selectedPokemonPage(){
+    showElements([returnButton]);
     localStorage.setItem("savedPage", "selectedPokemonPage");
-    let chosenPokemon = pikachu; //Vi sätter default till Pikachu, om utifall att ingen av de valda alternativen från listan matchar. 
+    let chosenPokemon = pikachu;
 
     [charmander, squirtle, bulbasaur].forEach(pokemon => {
         if(
@@ -313,4 +360,9 @@ function selectedPokemonPage(){
     endResult.className = "description";
     endResult.textContent = `${storedCharacter} har blivit tilldelad ${chosenPokemon.name}!`;
     sceneContainer.append(endResult, selectedPokemonImg);
+}
+
+returnButton.onclick = () => {
+    localStorage.clear();
+    location.reload();
 }
