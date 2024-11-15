@@ -7,7 +7,7 @@ window.addEventListener("DOMContentLoaded", main);
 /**
  *  Inställningar för bakgrundsmusik
  */
-const backgroundMusic = new Audio("assets/backgroundmusic.mp3"); 
+const backgroundMusic = new Audio("./assets/backgroundmusic.mp3"); 
 backgroundMusic.loop = true; 
 backgroundMusic.volume = 0.05;
 backgroundMusic.autoplay = true;
@@ -38,7 +38,7 @@ const charmander = {
     element: "FIRE 🔥",
     animal: "Dragon",
     color: "Red",
-    image: "/assets/charmander.png"
+    image: "./assets/charmander.png"
 };
 
 const squirtle = {
@@ -46,7 +46,7 @@ const squirtle = {
     element: "WATER 💧",
     animal: "Turtle",
     color: "Blue",
-    image: "/assets/squirtle.png"
+    image: "./assets/squirtle.png"
 };
 
 const bulbasaur = {
@@ -54,7 +54,7 @@ const bulbasaur = {
     element: "GRASS 🍃",
     animal: "Dinosaur",
     color: "Green",
-    image: "/assets/bulbasaur.png"
+    image: "./assets/bulbasaur.png"
 };
 
 const pikachu = {
@@ -62,7 +62,7 @@ const pikachu = {
     element: "Electric",
     animal: "Mouse",
     color: "Yellow",
-    image: "/assets/pikachu.png"
+    image: "./assets/pikachu.png"
 };
 
 
@@ -192,7 +192,7 @@ function housePage(){
 
     const gameSceneOne = document.createElement("img");
     gameSceneOne.className = "videoStyling";
-    gameSceneOne.src = "/assets/houseRoom.png";
+    gameSceneOne.src = "./assets/houseRoom.png";
 
     const buttonBack = document.createElement("button"); 
     buttonBack.textContent = "Tillbaka";
@@ -238,7 +238,7 @@ function worldPage(){
 
     const gameSceneTwo = document.createElement("img");
     gameSceneTwo.className = "videoStyling";
-    gameSceneTwo.src = "/assets/worldImage.png";
+    gameSceneTwo.src = "./assets/worldImage.png";
 
     const buttonToLab = document.createElement("button");
     buttonToLab.className = "navigateToLab";
@@ -262,7 +262,7 @@ function labPage(){
 
     const gameSceneThree = document.createElement("img");
     gameSceneThree.className = "videoStyling";
-    gameSceneThree.src = "/assets/pokemonRoom.png";
+    gameSceneThree.src = "./assets/pokemonRoom.png";
 
     const buttonToTest = document.createElement("button");
     buttonToTest.className = "navigateToTest";
